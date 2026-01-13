@@ -1,0 +1,23 @@
+meta {
+  name: cep-crawler
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{local_gateway}}/cep/crawler
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "cep_start": "01000000",
+    "cep_end": "01001000"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

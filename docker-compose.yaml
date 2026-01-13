@@ -1,0 +1,42 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_BASICAUTH_ENABLED: true
+      ME_CONFIG_BASICAUTH_USERNAME: mongoexpressuser
+      ME_CONFIG_BASICAUTH_PASSWORD: mongoexpresspass
+  elasticmq:
+    image: softwaremill/elasticmq
+    ports:
+      - "9324:9324"
+  node:
+    image: "node:22"
+    user: "node"
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - "8888:8888"
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - mongo
+      - elasticmq
+    environment:
+      NODE_ENV: production
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: example
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+      QUEUE_URL: http://elasticmq:9324/queue/cep-queue
+      PORT: 8888
