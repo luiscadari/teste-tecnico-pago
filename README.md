@@ -61,28 +61,33 @@ teste-tecnico-pago/
 ### Executando com Docker (Recomendado)
 
 1. Clone o repositório:
+
 ```bash
 git clone <url-do-repositorio>
 cd teste-tecnico-pago
 ```
 
 2. Inicie os containers:
+
 ```bash
 docker-compose up
 ```
 
 A aplicação estará disponível em:
+
 - **API**: http://localhost:8888
 - **Mongo Express**: http://localhost:8081 (usuário: `mongoexpressuser`, senha: `mongoexpresspass`)
 
 ### Executando Localmente
 
 1. Instale as dependências:
+
 ```bash
 npm install
 ```
 
 2. Configure as variáveis de ambiente (criar arquivo `.env`):
+
 ```env
 PORT=3000
 MONGO_USERNAME=root
@@ -95,11 +100,13 @@ REQUEST_DELAY_MS=1000
 ```
 
 3. Inicie apenas MongoDB e ElasticMQ:
+
 ```bash
 docker-compose up mongo elasticmq mongo-express
 ```
 
 4. Execute a aplicação:
+
 ```bash
 npm run dev    # Modo desenvolvimento
 npm start      # Modo produção
@@ -108,9 +115,11 @@ npm start      # Modo produção
 ## 📚 API Endpoints
 
 ### POST /crawler
+
 Inicia um novo processo de crawling de CEPs.
 
 **Request Body:**
+
 ```json
 {
   "cep_start": "01001000",
@@ -119,6 +128,7 @@ Inicia um novo processo de crawling de CEPs.
 ```
 
 **Response:**
+
 ```json
 {
   "crawlerId": "507f1f77bcf86cd799439011"
@@ -126,9 +136,11 @@ Inicia um novo processo de crawling de CEPs.
 ```
 
 ### GET /crawler/:id
+
 Consulta o status de um crawler específico.
 
 **Response:**
+
 ```json
 {
   "total": 101,
@@ -140,9 +152,11 @@ Consulta o status de um crawler específico.
 ```
 
 ### GET /crawler/:id/results
+
 Retorna todos os resultados coletados por um crawler.
 
 **Response:**
+
 ```json
 [
   {
@@ -171,16 +185,16 @@ Retorna todos os resultados coletados por um crawler.
 
 ### Variáveis de Ambiente
 
-| Variável | Descrição | Padrão |
-|----------|-----------|--------|
-| `PORT` | Porta da aplicação | 8888 |
-| `MONGO_USERNAME` | Usuário do MongoDB | root |
-| `MONGO_PASSWORD` | Senha do MongoDB | example |
-| `MONGO_HOST` | Host do MongoDB | mongo |
-| `MONGO_PORT` | Porta do MongoDB | 27017 |
-| `QUEUE_URL` | URL da fila SQS | http://elasticmq:9324/queue/cep-queue |
-| `MAX_NUMBER_OF_MESSAGES` | Máx. de mensagens por lote | 10 |
-| `REQUEST_DELAY_MS` | Delay entre requisições (ms) | 1000 |
+| Variável                 | Descrição                    | Padrão                                |
+| ------------------------ | ---------------------------- | ------------------------------------- |
+| `PORT`                   | Porta da aplicação           | 8888                                  |
+| `MONGO_USERNAME`         | Usuário do MongoDB           | root                                  |
+| `MONGO_PASSWORD`         | Senha do MongoDB             | example                               |
+| `MONGO_HOST`             | Host do MongoDB              | mongo                                 |
+| `MONGO_PORT`             | Porta do MongoDB             | 27017                                 |
+| `QUEUE_URL`              | URL da fila SQS              | http://elasticmq:9324/queue/cep-queue |
+| `MAX_NUMBER_OF_MESSAGES` | Máx. de mensagens por lote   | 10                                    |
+| `REQUEST_DELAY_MS`       | Delay entre requisições (ms) | 1000                                  |
 
 ## 🧪 Testando a Aplicação
 
@@ -202,6 +216,7 @@ curl http://localhost:8888/crawler/507f1f77bcf86cd799439011/results
 ## 📊 Monitoramento
 
 Acesse o Mongo Express em http://localhost:8081 para:
+
 - Visualizar documentos salvos
 - Verificar status dos crawlers
 - Analisar resultados em tempo real
@@ -220,10 +235,6 @@ Acesse o Mongo Express em http://localhost:8081 para:
 ## 🤝 Contribuindo
 
 Este é um projeto de desafio técnico, mas sugestões são bem-vindas.
-
-## 📝 Licença
-
-ISC
 
 ## 👤 Autor
 
