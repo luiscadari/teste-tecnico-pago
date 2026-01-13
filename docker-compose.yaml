@@ -40,3 +40,5 @@ services:
       MONGO_PORT: 27017
       QUEUE_URL: http://elasticmq:9324/queue/cep-queue
       PORT: 8888
+      MAX_NUMBER_OF_MESSAGES: 10
+      REQUEST_DELAY_MS: 1000

@@ -52,9 +52,8 @@ class CepServices {
       console.error("Error fetching CEP data", e);
       crawl.cep_range.push({ cep, error: "invalid CEP" });
       await crawl.save();
-      throw e;
     }
-    if (response.data.erro) {
+    if (!response.data || response.data.erro) {
       crawl.cep_range.push({ cep, error: "CEP not found" });
     } else {
       crawl.cep_range.push(response.data);
