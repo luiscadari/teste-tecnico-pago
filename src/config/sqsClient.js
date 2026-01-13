@@ -16,7 +16,7 @@ async function createQueueIfNotExists() {
     console.log(`Fila já existe: ${data.QueueUrl}`);
     process.env.QUEUE_URL = data.QueueUrl;
   } catch (error) {
-    if (error.code === "AWS.SimpleQueueService.NonExistentQueue") {
+    if (error.code === "QueueDoesNotExist") {
       // Se não existir, cria a fila
       console.log(`Criando fila: ${queueName}`);
 
@@ -32,8 +32,13 @@ async function createQueueIfNotExists() {
 
       const data = await sqs.createQueue(params).promise();
       console.log(`Fila criada com sucesso: ${data.QueueUrl}`);
-      process.env.QUEUE_URL = data.QueueUrl;
+
+      process.env.QUEUE_URL = data.QueueUrl.replaceAll(
+        "http://localhost:9324",
+        "http://elasticmq:9324"
+      );
     } else {
+      console.log(error);
       throw error;
     }
   }

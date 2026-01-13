@@ -1,0 +1,23 @@
+meta {
+  name: cep-status-docker
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{local_docker_gateway}}/cep/crawler/69668ddfb4ffbb56f18a11ac/results
+  body: none
+  auth: inherit
+}
+
+body:json {
+  {
+    "cep_start": "01000000",
+    "cep_end": "01001000"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

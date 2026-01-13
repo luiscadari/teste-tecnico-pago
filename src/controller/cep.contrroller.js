@@ -19,8 +19,29 @@ class Cep {
         .send("cep_start must be less than or equal to cep_end");
     }
     const crawl = await cepService.crawler(cep_start, cep_end);
-    await sqsService.processMessages();
-    res.status(202).send({ crawlerId: crawl.crawlerId });
+    res.status(200).send({ crawlerId: crawl.crawlerId });
+
+    setImmediate(() => {
+      sqsService.processMessages().catch((err) => {
+        console.error("Error processing messages:", err);
+      });
+    });
+  }
+  async getStatus(req, res) {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).send("id is required");
+    }
+    try {
+      const status = await cepService.getStatus(id);
+      if (!status) {
+        return res.status(404).send("Crawl not found");
+      }
+      return res.status(200).json(status);
+    } catch (e) {
+      console.error("Error getting status", e);
+      return res.status(500).send("Internal server error");
+    }
   }
   async getResults(req, res) {
     const { id } = req.params;

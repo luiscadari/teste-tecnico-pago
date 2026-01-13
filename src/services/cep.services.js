@@ -10,6 +10,7 @@ class CepServices {
       try {
         await queueServices.addToQueue({
           cep: cep.toString().padStart(8, "0"),
+          crawlerId: newCrawl._id,
         });
       } catch (e) {
         console.error("Error adding CEP to queue", e);
@@ -37,7 +38,7 @@ class CepServices {
     if (!crawl) {
       return null;
     }
-    return crawl.cep_range.filter((item) => !item.error);
+    return crawl.cep_range;
   }
   async postCep(crawlId, cep) {
     const crawl = await crowlerSchema.findById(crawlId);
@@ -49,12 +50,15 @@ class CepServices {
       response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
     } catch (e) {
       console.error("Error fetching CEP data", e);
-      crawl.cep_range.push({ cep, error: "Failed to fetch data" });
+      crawl.cep_range.push({ cep, error: "invalid CEP" });
       await crawl.save();
       throw e;
     }
-    const cepData = response.data;
-    crawl.cep_range.push(cepData);
+    if (response.data.erro) {
+      crawl.cep_range.push({ cep, error: "CEP not found" });
+    } else {
+      crawl.cep_range.push(response.data);
+    }
     await crawl.save();
     return { success: true };
   }
